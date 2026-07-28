@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+    <action>
+        <actionName>run</actionName>
+        <packagings>
+            <packaging>jar</packaging>
+        </packagings>
+        <goals>
+            <goal>javafx:run</goal>
+        </goals>
+    </action>
+    <action>
+        <actionName>debug</actionName>
+        <packagings>
+            <packaging>jar</packaging>
+        </packagings>
+        <goals>
+            <goal>javafx:run</goal>
+        </goals>
+        <properties>
+            <javafx.options>-agentlib:jdwp=transport=dt_socket,server=n,suspend=y,address=${jpda.address}</javafx.options>
+            <javafx.jvmArgs>-agentlib:jdwp=transport=dt_socket,server=n,suspend=y,address=${jpda.address}</javafx.jvmArgs>
+        </properties>
+    </action>
+    <action>
+        <actionName>CUSTOM-javafx-run</actionName>
+        <displayName>javafx:run</displayName>
+        <goals>
+            <goal>javafx:run</goal>
+        </goals>
+    </action>
+</actions>

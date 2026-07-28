@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<!--
+  Stock In tab. Open this file in Scene Builder to move things around, tweak
+  spacing, or add new fields. fx:id values here must match the @FXML fields
+  in StockInController.java; style classes here must exist in styles.css.
+-->
+
+<BorderPane styleClass="root-bg" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.larrystapsihan.inventory.StockInController">
+    <padding>
+        <Insets bottom="18" left="18" right="18" top="18" />
+    </padding>
+
+    <top>
+        <Label disable="true" styleClass="section-title" text="Stock In">
+            <BorderPane.margin>
+                <Insets bottom="14" />
+            </BorderPane.margin>
+        </Label>
+    </top>
+
+    <center>
+        <HBox>
+            <children>
+                <VBox maxWidth="320" prefWidth="320" spacing="6" styleClass="stockin-form">
+                    <children>
+                        <Label styleClass="field-label" text="INGREDIENT" />
+                        <ComboBox fx:id="ingredientBox" maxWidth="Infinity" styleClass="field-input" />
+                        <Label styleClass="field-label" text="QUANTITY DELIVERED">
+                            <VBox.margin>
+                                <Insets top="10" />
+                            </VBox.margin>
+                        </Label>
+                        <TextField fx:id="qtyField" promptText="e.g. 5" styleClass="field-input" />
+                        <Button maxWidth="Infinity" onAction="#handleAddStock" styleClass="add-btn" text="Add Stock">
+                            <VBox.margin>
+                                <Insets top="6" />
+                            </VBox.margin>
+                        </Button>
+                        <Label fx:id="toast" styleClass="toast-ok" text=" " />
+                    </children>
+                </VBox>
+
+                <Region minWidth="24" />
+
+                <VBox fx:id="logPanel" spacing="8" styleClass="log-panel" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label styleClass="log-panel-title" text="Recent Deliveries" />
+                        <VBox fx:id="logRows" spacing="0" />
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </center>
+</BorderPane>

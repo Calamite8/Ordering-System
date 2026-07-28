@@ -1,0 +1,198 @@
+.root {
+    -fx-board: #2B332C;
+    -fx-board-light: #363F30;
+    -fx-board-line: #47523F;
+    -fx-chalk: #F3EFE2;
+    -fx-chalk-dim: #B9C2AE;
+    -fx-annatto: #C0521F;
+    -fx-annatto-light: #DE7038;
+    -fx-turmeric: #E3A72B;
+    -fx-sili: #A23B2E;
+    -fx-kangkong: #7C9A65;
+    -fx-kraft: #E7DCC3;
+    -fx-kraft-dark: #D8C9A3;
+    -fx-ink: #332A1F;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: #2B332C;
+}
+
+
+
+.root-bg {
+    -fx-background-color: #2B332C;
+}
+
+.brand-mark {
+    -fx-font-size: 26px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #F3EFE2;
+}
+.brand-accent { -fx-text-fill: #E3A72B; }
+
+.brand-sub {
+    -fx-font-family: "Consolas", monospace;
+    -fx-font-size: 11px;
+    -fx-text-fill: #B9C2AE;
+}
+
+/* The main container styling */
+.header-box {
+-fx-border-color: transparent transparent #47523F transparent;
+-fx-border-width: 0 0 5 0;
+} 
+
+/* Outline styling for Text shapes (brand and brandAccent) */
+.brand-mark {
+-fx-fill: #47523F;             /* The inside color of your text */
+-fx-stroke: white;             /* The outline color */
+-fx-stroke-type: outside;      /* Keeps the outline from eating into the text fill */
+-fx-stroke-width: 100px;       /* Thickness of the outline */
+} 
+
+.brand-accent {
+-fx-fill: #E67E22;             /* Example accent color for TAPSIHAN */
+} 
+
+/* Outline styling for UI Controls (Label) */
+.brand-sub {
+-fx-text-fill: #47523F;        /* The inside color of the label text */ 
+
+/* Creates a sharp, crisp 1px white border around UI control text */
+-fx-effect: dropshadow(three-pass-box, white, 0, 1.0, 0, 0);
+}
+
+
+.section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #F3EFE2;
+}
+
+.section-note {
+    -fx-font-family: "Consolas", monospace;
+    -fx-font-size: 11.5px;
+    -fx-text-fill: #B9C2AE;
+}
+
+/* ---------- Tabs ---------- */
+.tab-pane { -fx-background-color: transparent; }
+.tab-pane .tab-header-area .tab-header-background { -fx-background-color: transparent; }
+.tab-pane .tab {
+    -fx-background-color: transparent;
+    -fx-background-radius: 3;
+    -fx-border-color: #47523F;
+    -fx-border-radius: 3;
+    -fx-padding: 6 12 6 12;
+}
+.tab-pane .tab:selected { -fx-background-color: #C0521F; -fx-border-color: #C0521F; }
+.tab-pane .tab .tab-label { -fx-text-fill: #B9C2AE; -fx-font-weight: 600; }
+.tab-pane .tab:selected .tab-label { -fx-text-fill: white; }
+.tab-pane .tab-content-area { -fx-background-color: #2B332C; }
+
+/* ---------- Stock Board cards ---------- */
+.chalk-card {
+    -fx-background-color: #363F30;
+    -fx-border-color: #47523F;
+    -fx-border-width: 1.5;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-padding: 12 14 12 14;
+}
+.card-name { -fx-text-fill: #F3EFE2; -fx-font-weight: 600; -fx-font-size: 13.5px; }
+.qty-line { -fx-text-fill: #F3EFE2; -fx-font-family: "Consolas", monospace; -fx-font-weight: 700; -fx-font-size: 20px; }
+.qty-unit { -fx-text-fill: #B9C2AE; -fx-font-size: 11px; }
+.threshold-line { -fx-text-fill: #B9C2AE; -fx-font-family: "Consolas", monospace; -fx-font-size: 10.5px; }
+
+.status-dot { -fx-min-width: 11; -fx-min-height: 11; -fx-max-width: 11; -fx-max-height: 11; -fx-background-radius: 100; }
+.status-fresh { -fx-background-color: #7C9A65; }
+.status-warn { -fx-background-color: #E3A72B; }
+.status-critical { -fx-background-color: #A23B2E; }
+
+.gauge-bar > .track { -fx-background-color: rgba(0,0,0,0.35); -fx-background-radius: 4; }
+.gauge-bar > .bar { -fx-background-insets: 0; -fx-background-radius: 4; -fx-padding: 3.5px; }
+.gauge-fresh > .bar { -fx-background-color: #7C9A65; }
+.gauge-warn > .bar { -fx-background-color: #E3A72B; }
+.gauge-critical > .bar { -fx-background-color: #A23B2E; }
+
+/* ---------- Tickets ---------- */
+.ticket {
+    -fx-background-color: #E7DCC3;
+    -fx-border-color: #D8C9A3;
+    -fx-border-width: 3 0 0 0;
+    -fx-background-radius: 2;
+    -fx-padding: 14 14 12 14;
+}
+.ticket-name { -fx-text-fill: #332A1F; -fx-font-weight: 800; -fx-font-size: 14px; }
+.ticket-price { -fx-text-fill: #C0521F; -fx-font-family: "Consolas", monospace; -fx-font-weight: 700; -fx-font-size: 13px; }
+.ticket-uses { -fx-text-fill: #5b4f3c; -fx-font-size: 11px; -fx-wrap-text: true; }
+
+.punch-btn {
+    -fx-background-color: #C0521F;
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-font-size: 12px;
+    -fx-background-radius: 3;
+    -fx-cursor: hand;
+}
+.punch-btn:hover { -fx-background-color: #DE7038; }
+.punch-btn:disabled { -fx-background-color: #9b8f75; -fx-opacity: 1.0; }
+
+/* ---------- Panels / logs ---------- */
+.log-panel {
+    -fx-background-color: #363F30;
+    -fx-border-color: #47523F;
+    -fx-border-width: 1.5;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-padding: 12 16 12 16;
+}
+.log-panel-title { -fx-text-fill: #F3EFE2; -fx-font-weight: 800; -fx-font-size: 13px; }
+.log-row-label { -fx-text-fill: #B9C2AE; -fx-font-family: "Consolas", monospace; -fx-font-size: 12px; }
+.log-empty { -fx-text-fill: #B9C2AE; -fx-font-family: "Consolas", monospace; -fx-font-size: 12px; }
+
+/* ---------- Stock In form ---------- */
+.stockin-form {
+    -fx-background-color: #363F30;
+    -fx-border-color: #47523F;
+    -fx-border-width: 1.5;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-padding: 20;
+}
+.field-label { -fx-text-fill: #B9C2AE; -fx-font-family: "Consolas", monospace; -fx-font-size: 11px; }
+.field-input {
+    -fx-background-color: #2B332C;
+    -fx-text-fill: #F3EFE2;
+    -fx-border-color: #47523F;
+    -fx-border-width: 1.5;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+}
+.add-btn {
+    -fx-background-color: #7C9A65;
+    -fx-text-fill: #132111;
+    -fx-font-weight: 700;
+    -fx-font-size: 13px;
+    -fx-background-radius: 3;
+    -fx-cursor: hand;
+}
+.add-btn:hover { -fx-opacity: 0.9; }
+.toast-ok { -fx-text-fill: #7C9A65; -fx-font-family: "Consolas", monospace; -fx-font-size: 12px; }
+.toast-error { -fx-text-fill: #A23B2E; -fx-font-family: "Consolas", monospace; -fx-font-size: 12px; }
+
+/* ---------- Reports ---------- */
+.stat-box {
+    -fx-background-color: #363F30;
+    -fx-border-color: #47523F;
+    -fx-border-width: 1.5;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-padding: 14;
+    -fx-alignment: center-left;
+}
+.stat-label { -fx-text-fill: #B9C2AE; -fx-font-family: "Consolas", monospace; -fx-font-size: 11px; }
+.stat-value { -fx-text-fill: #F3EFE2; -fx-font-weight: 800; -fx-font-size: 22px; }
+.rank-num { -fx-text-fill: #E3A72B; -fx-font-family: "Consolas", monospace; -fx-font-weight: 700; }
+.rank-name { -fx-text-fill: #F3EFE2; -fx-font-size: 12.5px; }
+.rank-val { -fx-text-fill: #B9C2AE; -fx-font-family: "Consolas", monospace; -fx-font-size: 12px; }
+.alert-num { -fx-text-fill: #A23B2E; -fx-font-weight: 800; }
