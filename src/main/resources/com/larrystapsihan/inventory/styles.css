@@ -22,43 +22,26 @@
     -fx-background-color: #2B332C;
 }
 
+/* ---------- Header / brand (Text nodes use -fx-fill; Labels use -fx-text-fill) ---------- */
+.header-box {
+    -fx-border-color: transparent transparent #47523F transparent;
+    -fx-border-width: 0 0 1.5 0;
+}
+
 .brand-mark {
     -fx-font-size: 26px;
     -fx-font-weight: 900;
-    -fx-text-fill: #F3EFE2;
+    -fx-fill: #F3EFE2;
 }
-.brand-accent { -fx-text-fill: #E3A72B; }
+
+.brand-accent {
+    -fx-fill: #E3A72B;
+}
 
 .brand-sub {
     -fx-font-family: "Consolas", monospace;
     -fx-font-size: 11px;
     -fx-text-fill: #B9C2AE;
-}
-
-/* The main container styling */
-.header-box {
--fx-border-color: transparent transparent #47523F transparent;
--fx-border-width: 0 0 5 0;
-} 
-
-/* Outline styling for Text shapes (brand and brandAccent) */
-.brand-mark {
--fx-fill: #47523F;             /* The inside color of your text */
--fx-stroke: white;             /* The outline color */
--fx-stroke-type: outside;      /* Keeps the outline from eating into the text fill */
--fx-stroke-width: 100px;       /* Thickness of the outline */
-} 
-
-.brand-accent {
--fx-fill: #E67E22;             /* Example accent color for TAPSIHAN */
-} 
-
-/* Outline styling for UI Controls (Label) */
-.brand-sub {
--fx-text-fill: #47523F;        /* The inside color of the label text */ 
-
-/* Creates a sharp, crisp 1px white border around UI control text */
--fx-effect: dropshadow(three-pass-box, white, 0, 1.0, 0, 0);
 }
 
 
