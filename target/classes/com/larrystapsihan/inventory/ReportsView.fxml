@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<!--
+  Reports tab. Open in Scene Builder to adjust layout/spacing.
+  fx:id values must match @FXML fields in ReportsController.java.
+-->
+
+<BorderPane styleClass="root-bg" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.larrystapsihan.inventory.ReportsController">
+    <padding>
+        <Insets bottom="18" left="18" right="18" top="18" />
+    </padding>
+
+    <top>
+        <Label styleClass="section-title" text="Reports">
+            <BorderPane.margin>
+                <Insets bottom="14" />
+            </BorderPane.margin>
+        </Label>
+    </top>
+
+    <center>
+        <VBox spacing="18">
+            <children>
+                <HBox fx:id="statStrip" spacing="14" />
+
+                <HBox spacing="16">
+                    <children>
+                        <VBox spacing="8" styleClass="log-panel" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label styleClass="log-panel-title" text="Fast-Moving Items Today" />
+                                <VBox fx:id="fastMovers" spacing="4" />
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="8" styleClass="log-panel" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label styleClass="log-panel-title" text="Low-Stock Alerts" />
+                                <VBox fx:id="lowStock" spacing="4" />
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>
