@@ -2,6 +2,7 @@ package com.larrystapsihan.inventory;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.function.Consumer;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -21,44 +22,40 @@ public class MainView extends BorderPane {
         getStyleClass().add("root-bg");
         setTop(buildHeader());
 
-        // InventoryStore.punchTicket()/addStock() already notify every registered
-        // change-listener, so each view's own "onDataChanged" hook can be a no-op -
-        // the shared refreshAll listener below is what keeps every tab in sync.
-        Runnable noOp = () -> { };
-        StockBoardView board = new StockBoardView(store);
-        SaleView sale = new SaleView(store, noOp);
-        ReportsView reports = new ReportsView(store);
-
-        // Stock In is now FXML (edit StockInView.fxml in Scene Builder); the
-        // other three tabs are still hand-coded Java for now.
-        FXMLLoader stockInLoader = new FXMLLoader(
-                getClass().getResource("StockInView.fxml"));
-        Parent stockInRoot;
-        try {
-            stockInRoot = stockInLoader.load();
-        } catch (IOException e) {
-            throw new UncheckedIOException("Failed to load StockInView.fxml", e);
-        }
-        StockInController stockInController = stockInLoader.getController();
-        stockInController.setStore(store);
+        LoadedTab<StockBoardController> board = loadTab("StockBoardView.fxml", c -> c.setStore(store));
+        LoadedTab<SaleController> sale = loadTab("SaleView.fxml", c -> c.setStore(store));
+        LoadedTab<StockInController> stockIn = loadTab("StockInView.fxml", c -> c.setStore(store));
+        LoadedTab<ReportsController> reports = loadTab("ReportsView.fxml", c -> c.setStore(store));
 
         Runnable refreshAll = () -> {
-            board.refresh();
-            sale.refresh();
-            stockInController.refresh();
-            reports.refresh();
+            board.controller().refresh();
+            sale.controller().refresh();
+            stockIn.controller().refresh();
+            reports.controller().refresh();
         };
         store.addChangeListener(refreshAll);
 
         TabPane tabs = new TabPane();
         tabs.getTabs().addAll(
-                tab("Stock Board", board),
-                tab("Record a Sale", sale),
-                tab("Stock In", stockInRoot),
-                tab("Reports", reports));
+                tab("Stock Board", board.root()),
+                tab("Record a Sale", sale.root()),
+                tab("Stock In", stockIn.root()),
+                tab("Reports", reports.root()));
         tabs.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> refreshAll.run());
 
         setCenter(tabs);
+    }
+
+    private static <T> LoadedTab<T> loadTab(String fxml, Consumer<T> init) {
+        FXMLLoader loader = new FXMLLoader(MainView.class.getResource(fxml));
+        try {
+            Parent root = loader.load();
+            T controller = loader.getController();
+            init.accept(controller);
+            return new LoadedTab<>(root, controller);
+        } catch (IOException e) {
+            throw new UncheckedIOException("Failed to load " + fxml, e);
+        }
     }
 
     private Tab tab(String title, Node content) {
@@ -73,16 +70,15 @@ public class MainView extends BorderPane {
         Text brandAccent = new Text(" TAPSIHAN");
         brandAccent.getStyleClass().addAll("brand-mark", "brand-accent");
         TextFlow brandLine = new TextFlow(brand, brandAccent);
-        
-        
+
         Label sub = new Label("INVENTORY SYSTEM \u00B7 STOCK BOARD");
         sub.getStyleClass().add("brand-sub");
         VBox header = new VBox(6, brandLine, sub);
         header.setPadding(new Insets(20, 22, 16, 22));
-        // Moved the inline style to a clean CSS class
         header.getStyleClass().add("header-box");
 
         return header;
-
     }
+
+    private record LoadedTab<T>(Parent root, T controller) { }
 }

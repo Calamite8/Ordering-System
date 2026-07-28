@@ -13,14 +13,19 @@ InventorySystem/
 ├── pom.xml                      Maven project (NetBeans opens this natively)
 ├── src/main/java/com/larrystapsihan/inventory/
 │   ├── Main.java                JavaFX Application entry point
-│   ├── MainView.java            Header + TabPane wiring the 4 views together
-│   ├── StockBoardView.java      Stock Board tab
-│   ├── SaleView.java            Record a Sale tab
-│   ├── StockInView.java         Stock In tab
-│   ├── ReportsView.java         Reports tab
+│   ├── MainView.java            Header + TabPane wiring the 4 FXML tabs together
+│   ├── StockBoardController.java   Stock Board tab controller
+│   ├── SaleController.java         Record a Sale tab controller
+│   ├── StockInController.java      Stock In tab controller
+│   ├── ReportsController.java      Reports tab controller
 │   ├── InventoryStore.java      In-memory data + business logic (no UI/DB code)
 │   ├── Ingredient.java, Dish.java, LogRecords.java   Plain model classes
-└── src/main/resources/com/larrystapsihan/inventory/styles.css
+├── src/main/resources/com/larrystapsihan/inventory/
+│   ├── StockBoardView.fxml      Stock Board layout (Scene Builder)
+│   ├── SaleView.fxml            Record a Sale layout (Scene Builder)
+│   ├── StockInView.fxml         Stock In layout (Scene Builder)
+│   ├── ReportsView.fxml         Reports layout (Scene Builder)
+│   └── styles.css
 ```
 
 `InventoryStore`, `Ingredient`, `Dish`, and the log records have **no
@@ -49,11 +54,10 @@ this per-project under **Project Properties → Actions** — check that
 
 ## Editing the UI visually with Scene Builder
 
-Scene Builder edits **FXML** files, not hand-written Java. Right now only
-one tab — **Stock In** — has been converted to FXML, as a working
-example; Stock Board, Record a Sale, and Reports are still plain Java
-(`StockBoardView.java`, `SaleView.java`, `ReportsView.java`) and won't
-open in Scene Builder until they're converted the same way.
+Scene Builder edits **FXML** files, not hand-written Java. All four tabs
+are FXML — open any `*View.fxml` under
+`src/main/resources/com/larrystapsihan/inventory/` in Scene Builder to
+adjust layout, spacing, or add controls.
 
 **Setup (one-time):**
 
@@ -65,8 +69,10 @@ open in Scene Builder until they're converted the same way.
 
 **Editing workflow:**
 
-1. In the Projects panel, find
-   `src/main/resources/com/larrystapsihan/inventory/StockInView.fxml`.
+1. In the Projects panel, find any tab FXML under
+   `src/main/resources/com/larrystapsihan/inventory/` (e.g.
+   `StockBoardView.fxml`, `SaleView.fxml`, `StockInView.fxml`,
+   `ReportsView.fxml`).
 2. Right-click it → **Open** (or **Edit** to see the raw XML). NetBeans
    launches Scene Builder with that file loaded.
 3. Drag controls around, change spacing/alignment in the Layout
@@ -74,28 +80,21 @@ open in Scene Builder until they're converted the same way.
 4. Back in NetBeans, re-run the project — the layout changes take
    effect immediately, no Java changes needed for layout-only edits.
 
-**How FXML connects to code** (the pattern to repeat for the other
-tabs):
+**How FXML connects to code:**
 
-- `StockInView.fxml` declares `fx:controller="...StockInController"`
-  and gives controls `fx:id`s (`ingredientBox`, `qtyField`, `toast`,
-  `logRows`) and an `onAction="#handleAddStock"` on the button.
-- `StockInController.java` has `@FXML`-annotated fields with those
-  exact names — FXMLLoader injects the matching control into each one
-  — plus an `@FXML handleAddStock()` method the button calls.
-- `MainView.java` loads the FXML with `FXMLLoader`, grabs the
+- Each `*View.fxml` declares `fx:controller="...*Controller"` and gives
+  controls `fx:id`s that match `@FXML` fields in the controller class.
+- `MainView.java` loads each FXML with `FXMLLoader`, grabs the
   controller via `loader.getController()`, and calls
   `controller.setStore(store)` once to hand it the shared data (FXML
   controllers have a no-arg constructor, so there's no other way to
   pass constructor arguments in).
-- Style classes referenced in the FXML (`stockin-form`, `field-label`,
-  `add-btn`, etc.) must already exist in `styles.css` — Scene Builder
-  will show a control as unstyled if you type a class name that isn't
-  in the stylesheet.
-
-If you'd like the remaining three tabs converted to FXML the same way,
-just ask — it's the same three steps each time (FXML file, controller
-class, one-line swap in `MainView`).
+- Dynamic content (ingredient cards, sale tickets, stat boxes, log
+  rows) is built in the controller's `refresh()` method — Scene Builder
+  only edits the static shell.
+- Style classes referenced in the FXML must already exist in
+  `styles.css` — Scene Builder will show a control as unstyled if you
+  type a class name that isn't in the stylesheet.
 
 ## Command line: run without packaging
 

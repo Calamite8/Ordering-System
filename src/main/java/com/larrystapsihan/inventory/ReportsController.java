@@ -4,51 +4,26 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import javafx.geometry.Insets;
+import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
-/** "Reports" view: mirrors the .stat-strip / .report-grid section of the prototype. */
-public class ReportsView extends BorderPane {
+/** Controller for ReportsView.fxml. */
+public class ReportsController {
 
-    private final InventoryStore store;
-    private final HBox statStrip = new HBox(14);
-    private final VBox fastMovers = new VBox(4);
-    private final VBox lowStock = new VBox(4);
+    @FXML private HBox statStrip;
+    @FXML private VBox fastMovers;
+    @FXML private VBox lowStock;
 
-    public ReportsView(InventoryStore store) {
+    private InventoryStore store;
+
+    public void setStore(InventoryStore store) {
         this.store = store;
-        getStyleClass().add("root-bg");
-        setPadding(new Insets(18));
-
-        Label title = new Label("Reports");
-        title.getStyleClass().add("section-title");
-        setTop(title);
-        BorderPane.setMargin(title, new Insets(0, 0, 14, 0));
-
-        VBox fastPanel = reportCard("Fast-Moving Items Today", fastMovers);
-        VBox lowPanel = reportCard("Low-Stock Alerts", lowStock);
-        HBox reportGrid = new HBox(16, fastPanel, lowPanel);
-        HBox.setHgrow(fastPanel, Priority.ALWAYS);
-        HBox.setHgrow(lowPanel, Priority.ALWAYS);
-
-        VBox content = new VBox(18, statStrip, reportGrid);
-        setCenter(content);
-
         refresh();
-    }
-
-    private VBox reportCard(String heading, VBox body) {
-        Label h = new Label(heading);
-        h.getStyleClass().add("log-panel-title");
-        VBox card = new VBox(8, h, body);
-        card.getStyleClass().add("log-panel");
-        return card;
     }
 
     public void refresh() {

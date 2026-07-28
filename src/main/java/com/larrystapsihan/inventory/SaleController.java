@@ -1,50 +1,27 @@
 package com.larrystapsihan.inventory;
 
 import java.util.Map;
+import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
-/** "Record a Sale" view: mirrors the .ticket-grid / .log-panel section of the prototype. */
-public class SaleView extends BorderPane {
+/** Controller for SaleView.fxml. */
+public class SaleController {
 
-    private final InventoryStore store;
-    private final Runnable onDataChanged;
-    private final FlowPane ticketGrid = new FlowPane(20, 20);
-    private final VBox logRows = new VBox(0);
+    @FXML private FlowPane ticketGrid;
+    @FXML private VBox logRows;
 
-    public SaleView(InventoryStore store, Runnable onDataChanged) {
+    private InventoryStore store;
+
+    public void setStore(InventoryStore store) {
         this.store = store;
-        this.onDataChanged = onDataChanged;
-        getStyleClass().add("root-bg");
-        setPadding(new Insets(18));
-
-        Label title = new Label("Record a Sale");
-        title.getStyleClass().add("section-title");
-        setTop(title);
-        BorderPane.setMargin(title, new Insets(0, 0, 14, 0));
-
-        ticketGrid.setPrefWrapLength(900);
-        ScrollPane ticketScroll = new ScrollPane(ticketGrid);
-        ticketScroll.setFitToWidth(true);
-        ticketScroll.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
-        setCenter(ticketScroll);
-
-        Label logTitle = new Label("Recently Punched");
-        logTitle.getStyleClass().add("log-panel-title");
-        VBox logPanel = new VBox(8, logTitle, logRows);
-        logPanel.getStyleClass().add("log-panel");
-        BorderPane.setMargin(logPanel, new Insets(14, 0, 0, 0));
-        setBottom(logPanel);
-
         refresh();
     }
 
@@ -83,11 +60,7 @@ public class SaleView extends BorderPane {
         punch.getStyleClass().add("punch-btn");
         punch.setMaxWidth(Double.MAX_VALUE);
         punch.setDisable(!ok);
-        punch.setOnAction(e -> {
-            if (store.punchTicket(dish.getId())) {
-                onDataChanged.run();
-            }
-        });
+        punch.setOnAction(e -> store.punchTicket(dish.getId()));
 
         VBox ticket = new VBox(6, name, price, uses, punch);
         ticket.getStyleClass().add("ticket");

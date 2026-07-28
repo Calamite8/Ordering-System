@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.VBox?>
+
+<!--
+  Record a Sale tab. Open in Scene Builder to adjust layout/spacing.
+  fx:id values must match @FXML fields in SaleController.java.
+-->
+
+<BorderPane styleClass="root-bg" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.larrystapsihan.inventory.SaleController">
+    <padding>
+        <Insets bottom="18" left="18" right="18" top="18" />
+    </padding>
+
+    <top>
+        <Label styleClass="section-title" text="Record a Sale">
+            <BorderPane.margin>
+                <Insets bottom="14" />
+            </BorderPane.margin>
+        </Label>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;">
+            <content>
+                <FlowPane fx:id="ticketGrid" hgap="20" prefWrapLength="900" vgap="20" />
+            </content>
+        </ScrollPane>
+    </center>
+
+    <bottom>
+        <VBox spacing="8" styleClass="log-panel">
+            <children>
+                <Label styleClass="log-panel-title" text="Recently Punched" />
+                <VBox fx:id="logRows" spacing="0" />
+            </children>
+            <BorderPane.margin>
+                <Insets top="14" />
+            </BorderPane.margin>
+        </VBox>
+    </bottom>
+</BorderPane>

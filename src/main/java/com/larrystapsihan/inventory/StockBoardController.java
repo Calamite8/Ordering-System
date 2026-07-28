@@ -1,11 +1,9 @@
 package com.larrystapsihan.inventory;
 
-import javafx.geometry.Insets;
+import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -13,34 +11,15 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 
-/** "Stock Board" tab: mirrors the .board-grid / .chalk-card section of the prototype. */
-public class StockBoardView extends BorderPane {
+/** Controller for StockBoardView.fxml. */
+public class StockBoardController {
 
-    private final InventoryStore store;
-    private final FlowPane grid = new FlowPane(14, 14);
+    @FXML private FlowPane grid;
 
-    public StockBoardView(InventoryStore store) {
+    private InventoryStore store;
+
+    public void setStore(InventoryStore store) {
         this.store = store;
-        getStyleClass().add("root-bg");
-        setPadding(new Insets(18));
-
-        Label title = new Label("Stock Board");
-        title.getStyleClass().add("section-title");
-        Label note = new Label("Live ingredient levels \u00B7 updates as tickets are punched and stock comes in");
-        note.getStyleClass().add("section-note");
-
-        VBox header = new VBox(4, title, note);
-        header.setPadding(new Insets(0, 0, 14, 0));
-
-        grid.setPrefWrapLength(900);
-
-        ScrollPane scroll = new ScrollPane(grid);
-        scroll.setFitToWidth(true);
-        scroll.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
-
-        setTop(header);
-        setCenter(scroll);
-
         refresh();
     }
 
