@@ -1,0 +1,339 @@
+/* =====================================================================
+   styles.css - the one stylesheet for the whole app (Order System + Admin login card)
+   Loaded by OrderMain. Colors are written as plain hex on purpose: the
+   -fx-* names in section 1 are only labels, not variables.
+
+   CONTENTS
+     1. Theme palette & page background
+     2. Text: titles and notes
+     3. Buttons        (punch-btn, add-btn, void-link, step-btn, toggle-btn, table-btn, key-btn)
+     4. Form fields & messages (field-*, toast-*)
+     5. Cards & panels (ticket, log-panel, stat-box, cart-list)
+     6. Admin login card (admin-*) - used by Settings
+     7. Sidebar        (nav-*)
+     8. Touchscreen Mode (.touch-mode - bigger buttons; switched on in Settings)
+   ===================================================================== */
+
+
+/* ---------- 1. Theme palette & page background ---------- */
+/* board #2B332C  board-light #363F30  board-line #47523F
+   chalk #F3EFE2  chalk-dim #B9C2AE   annatto #C0521F  annatto-light #DE7038
+   turmeric #E3A72B  sili #A23B2E  kangkong #7C9A65
+   kraft #E7DCC3  kraft-dark #D8C9A3  ink #332A1F */
+.root {
+    -fx-board: #2B332C;
+    -fx-board-light: #363F30;
+    -fx-board-line: #47523F;
+    -fx-chalk: #F3EFE2;
+    -fx-chalk-dim: #B9C2AE;
+    -fx-annatto: #C0521F;
+    -fx-annatto-light: #DE7038;
+    -fx-turmeric: #E3A72B;
+    -fx-sili: #A23B2E;
+    -fx-kangkong: #7C9A65;
+    -fx-kraft: #E7DCC3;
+    -fx-kraft-dark: #D8C9A3;
+    -fx-ink: #332A1F;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: #2B332C;
+}
+
+.root-bg {
+    -fx-background-color: #2B332C;
+}
+
+
+/* ---------- 2. Text: titles and notes ---------- */
+/* Text nodes use -fx-fill; Labels use -fx-text-fill. */
+.section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #F3EFE2;
+}
+.section-note {
+    -fx-font-family: "Consolas", monospace;
+    -fx-font-size: 11.5px;
+    -fx-text-fill: #B9C2AE;
+}
+
+
+/* ---------- 3. Buttons ---------- */
+/* Orange main action: Add to Cart, Finalize Order, Sign In */
+.punch-btn {
+    -fx-background-color: #C0521F;
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-font-size: 14px;
+    -fx-padding: 11 18 11 18;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+.punch-btn:hover { -fx-background-color: #DE7038; }
+.punch-btn:disabled { -fx-background-color: #9b8f75; -fx-opacity: 1.0; }
+
+/* Green: Mark Served, + Add Item */
+.add-btn {
+    -fx-background-color: #7C9A65;
+    -fx-text-fill: #132111;
+    -fx-font-weight: 700;
+    -fx-font-size: 14px;
+    -fx-padding: 10 18 10 18;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+.add-btn:hover { -fx-opacity: 0.9; }
+
+/* BIG gold "+ ADD NEW ITEM" button in the New Order header - meant to stand out */
+.add-item-btn {
+    -fx-background-color: #E3A72B;
+    -fx-text-fill: #2B1B05;
+    -fx-font-size: 16px;
+    -fx-font-weight: 900;
+    -fx-padding: 14 28 14 28;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(227,167,43,0.55), 14, 0.3, 0, 0);
+}
+.add-item-btn:hover { -fx-background-color: #F2BC4A; }
+
+/* Dashed "+" tile at the end of the menu grid */
+.add-tile {
+    -fx-background-color: rgba(227,167,43,0.10);
+    -fx-border-color: #E3A72B;
+    -fx-border-width: 2;
+    -fx-border-style: segments(8, 6);
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+.add-tile:hover { -fx-background-color: rgba(227,167,43,0.22); }
+.add-tile-plus { -fx-text-fill: #E3A72B; -fx-font-size: 48px; -fx-font-weight: 900; }
+.add-tile-text { -fx-text-fill: #E3A72B; -fx-font-size: 15px; -fx-font-weight: 800; }
+
+/* Red outline: Clear Queue, Clear Receipts, Request Void, Sign Out, remove-from-cart */
+.void-link {
+    -fx-background-color: transparent;
+    -fx-text-fill: #A23B2E;
+    -fx-border-color: #A23B2E;
+    -fx-border-width: 1.5;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-padding: 8 14 8 14;
+    -fx-cursor: hand;
+}
+.void-link:hover { -fx-background-color: #A23B2E; -fx-text-fill: white; }
+
+/* Small + / - quantity buttons in the cart */
+.step-btn {
+    -fx-background-color: #363F30;
+    -fx-text-fill: #F3EFE2;
+    -fx-border-color: #47523F;
+    -fx-border-width: 1.5;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+    -fx-font-weight: 700;
+    -fx-font-size: 15px;
+    -fx-min-width: 34;
+    -fx-min-height: 32;
+    -fx-cursor: hand;
+}
+.step-btn:hover { -fx-border-color: #E3A72B; }
+
+/* Two-way switches: Dine-in / Take-out (also the table and void-reason pickers) */
+.toggle-btn {
+    -fx-background-color: #2B332C;
+    -fx-text-fill: #B9C2AE;
+    -fx-border-color: #47523F;
+    -fx-border-width: 1.5;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+    -fx-font-weight: 600;
+    -fx-font-size: 14px;
+    -fx-padding: 10 12 10 12;
+    -fx-cursor: hand;
+}
+.toggle-btn:selected {
+    -fx-background-color: #C0521F;
+    -fx-border-color: #C0521F;
+    -fx-text-fill: white;
+}
+
+/* Small square table-number buttons in the cart panel */
+.table-btn {
+    -fx-min-width: 48;
+    -fx-pref-width: 48;
+    -fx-padding: 9 0 9 0;
+}
+
+/* On-screen keyboard (OnScreenKeyboard.java) */
+.keyboard {
+    -fx-background-color: #232B23;
+    -fx-border-color: #47523F;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 12;
+}
+.key-btn {
+    -fx-background-color: #363F30;
+    -fx-text-fill: #F3EFE2;
+    -fx-border-color: #47523F;
+    -fx-border-width: 1.5;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+}
+.key-btn:hover { -fx-border-color: #E3A72B; }
+.key-btn:armed { -fx-background-color: #C0521F; }
+.key-action { -fx-text-fill: #DE7038; }
+.key-on { -fx-background-color: #C0521F; -fx-text-fill: white; }
+
+
+/* ---------- 4. Form fields & messages ---------- */
+.field-label { -fx-text-fill: #B9C2AE; -fx-font-family: "Consolas", monospace; -fx-font-size: 11px; }
+.field-input {
+    -fx-background-color: #2B332C;
+    -fx-text-fill: #F3EFE2;
+    -fx-border-color: #47523F;
+    -fx-border-width: 1.5;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+}
+.toast-ok { -fx-text-fill: #7C9A65; -fx-font-family: "Consolas", monospace; -fx-font-size: 12px; }
+.toast-error { -fx-text-fill: #A23B2E; -fx-font-family: "Consolas", monospace; -fx-font-size: 12px; }
+
+
+/* ---------- 5. Cards & panels ---------- */
+/* Kraft-paper card: menu items, kitchen tickets, receipts */
+.ticket {
+    -fx-background-color: #E7DCC3;
+    -fx-border-color: #D8C9A3;
+    -fx-border-width: 3 0 0 0;
+    -fx-background-radius: 2;
+    -fx-padding: 14 14 12 14;
+}
+.ticket-name { -fx-text-fill: #332A1F; -fx-font-weight: 800; -fx-font-size: 16px; }
+/* Dish photo on a menu card, and its "No photo" placeholder */
+.photo-box {
+    -fx-background-color: #D9CDB0;
+    -fx-background-radius: 4;
+    -fx-border-color: #B8A988;
+    -fx-border-radius: 4;
+    -fx-border-style: segments(5, 4);
+}
+.photo-none { -fx-text-fill: #8A7B5C; -fx-font-family: "Consolas", monospace; -fx-font-weight: 700; -fx-font-size: 12px; }
+.ticket-price { -fx-text-fill: #C0521F; -fx-font-family: "Consolas", monospace; -fx-font-weight: 700; -fx-font-size: 13px; }
+.ticket-uses { -fx-text-fill: #5b4f3c; -fx-font-size: 11px; -fx-wrap-text: true; }
+
+/* Dark panel: the cart, the Shift Summary lists, Settings */
+.log-panel {
+    -fx-background-color: #363F30;
+    -fx-border-color: #47523F;
+    -fx-border-width: 1.5;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-padding: 12 16 12 16;
+}
+.log-panel-title { -fx-text-fill: #F3EFE2; -fx-font-weight: 800; -fx-font-size: 13px; }
+.log-row-label { -fx-text-fill: #B9C2AE; -fx-font-family: "Consolas", monospace; -fx-font-size: 12px; }
+.log-empty { -fx-text-fill: #B9C2AE; -fx-font-family: "Consolas", monospace; -fx-font-size: 12px; }
+.cart-list { -fx-min-height: 40; }
+
+/* Shift Summary: stat boxes and order-history rows */
+.stat-box {
+    -fx-background-color: #363F30;
+    -fx-border-color: #47523F;
+    -fx-border-width: 1.5;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-padding: 14;
+    -fx-alignment: center-left;
+}
+.stat-label { -fx-text-fill: #B9C2AE; -fx-font-family: "Consolas", monospace; -fx-font-size: 11px; }
+.stat-value { -fx-text-fill: #F3EFE2; -fx-font-weight: 800; -fx-font-size: 22px; }
+.rank-num { -fx-text-fill: #E3A72B; -fx-font-family: "Consolas", monospace; -fx-font-weight: 700; }
+.rank-name { -fx-text-fill: #F3EFE2; -fx-font-size: 12.5px; }
+
+
+/* ---------- 6. Admin login card (Settings) ---------- */
+.admin-card {
+    -fx-background-color: #E7DCC3;
+    -fx-border-color: #D8C9A3;
+    -fx-border-width: 1.5;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-padding: 28 26 24 26;
+}
+.admin-title { -fx-text-fill: #332A1F; -fx-font-size: 16px; -fx-font-weight: 800; }
+.admin-note { -fx-text-fill: #5b4f3c; -fx-font-family: "Consolas", monospace; -fx-font-size: 11px; }
+
+.admin-field-label {
+    -fx-text-fill: #6b5f48;
+    -fx-font-family: "Consolas", monospace;
+    -fx-font-size: 11px;
+}
+.admin-field-input {
+    -fx-background-color: #F8F3E6;
+    -fx-text-fill: #332A1F;
+    -fx-border-color: #D8C9A3;
+    -fx-border-width: 1.5;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+}
+.admin-field-input:focused { -fx-border-color: #C0521F; }
+
+
+/* ---------- 7. Sidebar ---------- */
+.nav-sidebar {
+    -fx-background-color: #232B23;
+    -fx-border-color: transparent #47523F transparent transparent;
+    -fx-border-width: 0 1.5 0 0;
+}
+
+.nav-btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-padding: 14 18 14 18;
+    -fx-cursor: hand;
+}
+.nav-btn:hover { -fx-background-color: #2B332C; }
+.nav-btn:selected {
+    -fx-background-color: #363F30;
+    -fx-border-color: transparent transparent transparent #C0521F;
+    -fx-border-width: 0 0 0 4;
+}
+
+.nav-icon { -fx-font-size: 20px; -fx-text-fill: #C0521F; }
+.nav-btn:selected .nav-icon { -fx-text-fill: #DE7038; }
+.nav-text {
+    -fx-text-fill: #F3EFE2;
+    -fx-font-weight: 700;
+    -fx-font-size: 12.5px;
+}
+
+
+/* ---------- 8. Touchscreen Mode ----------
+   TouchMode.java adds the "touch-mode" class to the window root and to every
+   dialog while the Settings switch is on. Everything below only applies then:
+   finger-sized targets (about 48px tall). */
+.touch-mode .step-btn      { -fx-min-width: 56; -fx-min-height: 50; -fx-font-size: 20px; }
+.touch-mode .void-link     { -fx-min-height: 48; -fx-padding: 12 20 12 20; -fx-font-size: 15px; }
+.touch-mode .punch-btn     { -fx-min-height: 52; -fx-padding: 14 22 14 22; -fx-font-size: 16px; }
+.touch-mode .add-btn       { -fx-min-height: 52; -fx-padding: 14 22 14 22; -fx-font-size: 16px; }
+.touch-mode .add-item-btn  { -fx-min-height: 56; -fx-font-size: 18px; }
+.touch-mode .toggle-btn    { -fx-min-height: 52; -fx-padding: 14 16 14 16; -fx-font-size: 16px; }
+.touch-mode .table-btn     { -fx-min-width: 60; -fx-pref-width: 60; -fx-min-height: 52; -fx-padding: 14 0 14 0; }
+.touch-mode .nav-btn       { -fx-padding: 20 18 20 18; }
+.touch-mode .nav-icon      { -fx-font-size: 24px; }
+.touch-mode .nav-text      { -fx-font-size: 16px; }
+.touch-mode .key-btn       { -fx-min-width: 54; -fx-min-height: 56; -fx-font-size: 19px; }
+.touch-mode .field-input,
+.touch-mode .admin-field-input { -fx-min-height: 46; -fx-font-size: 16px; }
+.touch-mode .scroll-bar:vertical { -fx-pref-width: 24; }
+.dialog-pane.touch-mode .button { -fx-min-height: 50; -fx-min-width: 110; -fx-font-size: 16px; }

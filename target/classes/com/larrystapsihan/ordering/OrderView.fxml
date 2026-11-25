@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+
+<!--
+  Order System shell. The left-hand icon sidebar (New Order / Kitchen
+  Queue / Receipts / Shift Summary, plus Settings pinned at the bottom)
+  and all four content panes are built entirely in OrderController.java -
+  Scene Builder only owns this empty root, same pattern as LoginView.fxml.
+-->
+
+<BorderPane fx:id="root" styleClass="root-bg" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.larrystapsihan.ordering.OrderController">
+</BorderPane>
