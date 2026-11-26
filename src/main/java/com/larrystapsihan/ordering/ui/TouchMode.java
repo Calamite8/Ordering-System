@@ -1,11 +1,5 @@
 package com.larrystapsihan.ordering.ui;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Properties;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -25,7 +19,6 @@ import javafx.scene.Node;
 public final class TouchMode {
 
     public static final String STYLE_CLASS = "touch-mode";
-    private static final Path FILE = Path.of(System.getProperty("user.home"), "LarrysTapsihan", "settings.properties");
     private static final BooleanProperty ENABLED = new SimpleBooleanProperty(load());
 
     static {
@@ -52,26 +45,10 @@ public final class TouchMode {
     }
 
     private static boolean load() {
-        if (!Files.exists(FILE)) return false;
-        Properties p = new Properties();
-        try (InputStream in = Files.newInputStream(FILE)) {
-            p.load(in);
-        } catch (IOException e) {
-            return false;
-        }
-        return Boolean.parseBoolean(p.getProperty("touchMode", "false"));
+        return Boolean.parseBoolean(SettingsFile.get("touchMode", "false"));
     }
 
     private static void save(boolean on) {
-        Properties p = new Properties();
-        p.setProperty("touchMode", String.valueOf(on));
-        try {
-            Files.createDirectories(FILE.getParent());
-            try (OutputStream out = Files.newOutputStream(FILE)) {
-                p.store(out, "Larry's Tapsihan display settings");
-            }
-        } catch (IOException e) {
-            System.err.println("Could not save settings: " + e.getMessage());
-        }
+        SettingsFile.set("touchMode", String.valueOf(on));
     }
 }

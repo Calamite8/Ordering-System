@@ -44,7 +44,7 @@ public class NewOrderScreen implements Screen {
     private final Map<String, Integer> cart = new LinkedHashMap<>();   // dishId -> qty
     private String orderType = "Dine-in";
     private static final String PAYMENT = "Cash";    // the only payment method
-    private static final int TABLE_COUNT = 12;       // how many table buttons to show
+    static final int TABLE_COUNT = 12;       // how many table buttons to show
 
     // ---- widgets that refresh() redraws ----
     private final FlowPane menuGrid = new FlowPane(14, 14);

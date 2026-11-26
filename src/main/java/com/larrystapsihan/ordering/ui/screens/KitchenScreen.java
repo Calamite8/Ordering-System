@@ -2,6 +2,7 @@ package com.larrystapsihan.ordering.ui.screens;
 
 import com.larrystapsihan.ordering.model.Order;
 import com.larrystapsihan.ordering.model.OrderItem;
+import com.larrystapsihan.ordering.model.OrderStatus;
 import com.larrystapsihan.ordering.service.AdminService;
 import com.larrystapsihan.ordering.service.OrderService;
 import java.util.List;
@@ -13,8 +14,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 
 /**
- * Kitchen Queue page: one ticket card per order that is not yet served or
- * voided, each with a "Mark Served" button, plus "Clear Queue" to mark
+ * Kitchen Queue page: one ticket card per paid order that is not yet
+ * served, each with a "Mark Ready" and then a "Mark Served" button, plus "Clear Queue" to mark
  * every open ticket served at once (admin only).
  */
 public class KitchenScreen implements Screen {
@@ -32,7 +33,7 @@ public class KitchenScreen implements Screen {
         ScreenLayout.adminOnly(clearQueue, admin);
 
         view = ScreenLayout.page("Kitchen Queue",
-                "Tickets waiting to be served. Mark served once the order leaves the kitchen.",
+                "Paid orders being prepared. Mark ready when the food is done, served when it is handed over.",
                 clearQueue, ScreenLayout.transparentScroll(ticketGrid));
     }
 
@@ -43,7 +44,7 @@ public class KitchenScreen implements Screen {
     public void refresh() {
         ticketGrid.getChildren().clear();
         List<Order> active = orderService.getOrders().stream()
-                .filter(o -> !o.isServed() && !o.isVoided()).toList();
+                .filter(Order::isActive).toList();
         if (active.isEmpty()) {
             Label empty = new Label("No active tickets.");
             empty.getStyleClass().add("log-empty");
@@ -68,12 +69,18 @@ public class KitchenScreen implements Screen {
             items.getChildren().add(line);
         }
 
-        Button serve = new Button("Mark Served");
-        serve.getStyleClass().add("add-btn");
-        serve.setMaxWidth(Double.MAX_VALUE);
-        serve.setOnAction(e -> orderService.markServed(o.getId()));
+        // In Kitchen -> Mark Ready -> (customer board shows it as ready) -> Mark Served
+        boolean ready = o.getStatus() == OrderStatus.READY;
+        Label state = new Label(ready ? "READY FOR PICKUP" : "PREPARING");
+        state.getStyleClass().add(ready ? "ticket-ready" : "ticket-uses");
+        Button action = new Button(ready ? "Mark Served" : "Mark Ready");
+        action.getStyleClass().add("add-btn");
+        action.setMaxWidth(Double.MAX_VALUE);
+        action.setOnAction(e -> {
+            if (ready) orderService.markServed(o.getId()); else orderService.markReady(o.getId());
+        });
 
-        VBox ticket = new VBox(6, header, time, items, serve);
+        VBox ticket = new VBox(6, header, time, state, items, action);
         ticket.getStyleClass().add("ticket");
         ticket.setPrefWidth(220);
         return ticket;

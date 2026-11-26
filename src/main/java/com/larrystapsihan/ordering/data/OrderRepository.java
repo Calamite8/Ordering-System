@@ -3,6 +3,7 @@ package com.larrystapsihan.ordering.data;
 import com.larrystapsihan.ordering.model.Dish;
 import com.larrystapsihan.ordering.model.Order;
 import com.larrystapsihan.ordering.model.OrderItem;
+import com.larrystapsihan.ordering.model.OrderStatus;
 import com.larrystapsihan.ordering.model.VoidRecord;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -71,6 +72,15 @@ public class OrderRepository {
                         voided BOOLEAN NOT NULL DEFAULT FALSE
                     )
                     """);
+            // databases saved by an older version have no status / amount_paid columns yet
+            boolean hasStatus = false;
+            try (ResultSet cols = st.executeQuery("PRAGMA table_info(orders)")) {
+                while (cols.next()) if ("status".equals(cols.getString("name"))) hasStatus = true;
+            }
+            if (!hasStatus) {
+                st.executeUpdate("ALTER TABLE orders ADD COLUMN status TEXT NOT NULL DEFAULT ''");
+                st.executeUpdate("ALTER TABLE orders ADD COLUMN amount_paid INTEGER NOT NULL DEFAULT 0");
+            }
             st.executeUpdate("""
                     CREATE TABLE IF NOT EXISTS order_items (
                         order_id INT NOT NULL,
@@ -203,8 +213,8 @@ public class OrderRepository {
         try (Connection c = connect()) {
             c.setAutoCommit(false);
             try (PreparedStatement ps = c.prepareStatement(
-                    "INSERT INTO orders (id, type, table_no, pay_method, total, order_time, served, voided) "
-                            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
+                    "INSERT INTO orders (id, type, table_no, pay_method, total, order_time, served, voided, status, amount_paid) "
+                            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
                 ps.setInt(1, order.getId());
                 ps.setString(2, order.getType());
                 ps.setString(3, order.getTable());
@@ -213,6 +223,8 @@ public class OrderRepository {
                 ps.setString(6, order.getTime());
                 ps.setBoolean(7, order.isServed());
                 ps.setBoolean(8, order.isVoided());
+                ps.setString(9, order.getStatus().name());
+                ps.setInt(10, order.getAmountPaid());
                 ps.executeUpdate();
             }
             try (PreparedStatement ps = c.prepareStatement(
@@ -237,10 +249,12 @@ public class OrderRepository {
     public void updateStatus(Order order) {
         try (Connection c = connect();
              PreparedStatement ps = c.prepareStatement(
-                     "UPDATE orders SET served = ?, voided = ? WHERE id = ?")) {
+                     "UPDATE orders SET served = ?, voided = ?, status = ?, amount_paid = ? WHERE id = ?")) {
             ps.setBoolean(1, order.isServed());
             ps.setBoolean(2, order.isVoided());
-            ps.setInt(3, order.getId());
+            ps.setString(3, order.getStatus().name());
+            ps.setInt(4, order.getAmountPaid());
+            ps.setInt(5, order.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to update order #" + order.getId(), e);
@@ -280,14 +294,19 @@ public class OrderRepository {
         try (Connection c = connect();
              Statement st = c.createStatement();
              ResultSet rs = st.executeQuery(
-                     "SELECT id, type, table_no, pay_method, total, order_time, served, voided "
+                     "SELECT id, type, table_no, pay_method, total, order_time, served, voided, status, amount_paid "
                              + "FROM orders ORDER BY id DESC")) {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 Order order = new Order(id, rs.getString("type"), rs.getString("table_no"),
                         rs.getString("pay_method"), itemsByOrder.getOrDefault(id, List.of()),
                         rs.getInt("total"), rs.getString("order_time"));
-                order.setServed(rs.getBoolean("served"));
+                OrderStatus saved = OrderStatus.fromSaved(rs.getString("status"));
+                // orders from an older version have no status: they were paid on the spot
+                order.setStatus(saved != null ? saved
+                        : rs.getBoolean("served") ? OrderStatus.SERVED : OrderStatus.IN_KITCHEN);
+                int paid = rs.getInt("amount_paid");
+                order.setAmountPaid(paid == 0 && order.getStatus() != OrderStatus.PENDING_PAYMENT ? order.getTotal() : paid);
                 order.setVoided(rs.getBoolean("voided"));
                 orders.add(order);
             }

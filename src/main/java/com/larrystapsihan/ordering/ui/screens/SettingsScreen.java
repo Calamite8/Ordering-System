@@ -1,6 +1,7 @@
 package com.larrystapsihan.ordering.ui.screens;
 
 import com.larrystapsihan.ordering.service.AdminService;
+import com.larrystapsihan.ordering.ui.CustomerWindow;
 import com.larrystapsihan.ordering.ui.OnScreenKeyboard;
 import com.larrystapsihan.ordering.ui.TouchMode;
 import javafx.geometry.Insets;
@@ -32,8 +33,13 @@ public class SettingsScreen implements Screen {
     private final BorderPane view;
     private OnScreenKeyboard keyboard;   // rebuilt with each card; every field registers on it
 
-    public SettingsScreen(AdminService admin) {
+    private final CustomerWindow customerWindow;
+    private final Runnable openCustomerScreen;
+
+    public SettingsScreen(AdminService admin, CustomerWindow customerWindow, Runnable openCustomerScreen) {
         this.admin = admin;
+        this.customerWindow = customerWindow;
+        this.openCustomerScreen = openCustomerScreen;
 
         view = new BorderPane();
         view.getStyleClass().add("root-bg");
@@ -41,8 +47,8 @@ public class SettingsScreen implements Screen {
 
         Label title = new Label("Settings");
         title.getStyleClass().add("section-title");
-        Label note = new Label("Admin login unlocks Manage Menu (categories, items, prices), Clear Queue, Clear Receipts "
-                + "and voiding orders.");
+        Label note = new Label("Admin login unlocks Manage Menu (categories, items, prices), Shift Summary, Clear Queue, "
+                + "Clear Receipts and voiding orders.");
         note.getStyleClass().add("section-note");
         note.setWrapText(true);
         VBox header = new VBox(4, title, note);
@@ -63,7 +69,7 @@ public class SettingsScreen implements Screen {
         VBox card = !admin.hasAdmin() ? buildCreateCard()
                 : admin.isLoggedIn() ? buildAdminModeCard()
                 : buildLoginCard();
-        VBox left = new VBox(18, card, buildTouchModeCard());
+        VBox left = new VBox(18, card, buildTouchModeCard(), buildCustomerScreenCard());
         left.setMaxHeight(Region.USE_PREF_SIZE);
         HBox content = new HBox(24, left, keyboard);   // touch keyboard beside the forms
         content.setAlignment(Pos.TOP_LEFT);
@@ -158,6 +164,37 @@ public class SettingsScreen implements Screen {
         toggle.setOnAction(e -> { TouchMode.setEnabled(toggle.isSelected()); label.run(); });
         return card("Touchscreen Mode",
                 "For a touchscreen: bigger buttons, always-visible tab names, the on-screen keyboard and table-number buttons. Turn it off to use a physical keyboard.", toggle);
+    }
+
+    /** Open / close the Customer Screen, and whether it opens by itself at startup (staff use this too). */
+    private VBox buildCustomerScreenCard() {
+        Button openClose = new Button();
+        openClose.getStyleClass().add("punch-btn");
+        openClose.setMaxWidth(Double.MAX_VALUE);
+        Runnable label = () -> openClose.setText(customerWindow.isOpen() ? "Close Customer Screen" : "Open Customer Screen");
+        label.run();
+        openClose.setOnAction(e -> {
+            if (customerWindow.isOpen()) customerWindow.close(); else openCustomerScreen.run();
+            label.run();
+        });
+        customerWindow.openProperty().addListener((obs, was, is) -> label.run());
+
+        ToggleButton auto = new ToggleButton();
+        auto.getStyleClass().add("toggle-btn");
+        auto.setMaxWidth(Double.MAX_VALUE);
+        auto.setSelected(CustomerWindow.autoOpenProperty().get());
+        Runnable autoLabel = () -> auto.setText(auto.isSelected()
+                ? "Opens at startup: ON  -  tap to turn off"
+                : "Opens at startup: OFF  -  tap to turn on");
+        autoLabel.run();
+        auto.setOnAction(e -> { CustomerWindow.autoOpenProperty().set(auto.isSelected()); autoLabel.run(); });
+
+        int displays = CustomerWindow.displayCount();
+        return card("Customer Screen",
+                "A tap-only self-order screen for customers. They order and get an order number, then pay the cashier "
+                        + "(see the Payments tab). With two displays it opens full-screen on the second one. "
+                        + "This computer has " + displays + (displays == 1 ? " display." : " displays."),
+                openClose, auto);
     }
 
     // ------------------------------------------------------------ small helpers

@@ -354,3 +354,30 @@
 .combo-box-popup .list-cell:filled:hover,
 .combo-box-popup .list-cell:filled:selected { -fx-background-color: #E3A72B; -fx-text-fill: #2B332C; }
 .touch-mode .combo-box { -fx-min-height: 52; }
+
+/* 10. Kitchen "ready" tag, pending-payment page, customer self-order screen */
+.ticket-ready { -fx-text-fill: #E3A72B; -fx-font-weight: 800; -fx-font-size: 12px; }
+.pending-row { -fx-background-color: #373F33; -fx-background-radius: 6; -fx-padding: 10 12 10 12; -fx-alignment: center-left; -fx-text-fill: #F3EFE2; -fx-border-color: #4A5446; -fx-border-radius: 6; }
+.pending-row:selected { -fx-background-color: #C0521F; -fx-border-color: #C0521F; }
+.pay-big { -fx-text-fill: #F3EFE2; -fx-font-weight: 800; -fx-font-size: 22px; }
+.change-ok { -fx-text-fill: #8FD18F; -fx-font-weight: 800; -fx-font-size: 20px; }
+.change-short { -fx-text-fill: #F0A08A; -fx-font-weight: 800; -fx-font-size: 20px; }
+
+.customer-root { -fx-background-color: #2B332C; }
+.customer-title { -fx-text-fill: #F3EFE2; -fx-font-weight: 800; -fx-font-size: 30px; }
+.customer-sub { -fx-text-fill: #B9C2AE; -fx-font-size: 16px; }
+.cust-card { -fx-background-color: #E7DCC3; -fx-background-radius: 10; -fx-cursor: hand; }
+.cust-card:hover { -fx-background-color: #F0E6CF; }
+.cust-name { -fx-text-fill: #2B332C; -fx-font-weight: 800; -fx-font-size: 18px; }
+.cust-price { -fx-text-fill: #C0521F; -fx-font-weight: 800; -fx-font-size: 18px; }
+.cust-panel { -fx-background-color: #373F33; -fx-background-radius: 10; -fx-border-color: #4A5446; -fx-border-radius: 10; }
+.cust-line { -fx-text-fill: #F3EFE2; -fx-font-size: 16px; }
+.cust-total { -fx-text-fill: #F3EFE2; -fx-font-weight: 800; -fx-font-size: 30px; }
+.cust-big { -fx-text-fill: #F3EFE2; -fx-font-weight: 800; -fx-font-size: 40px; }
+.cust-number { -fx-text-fill: #E3A72B; -fx-font-weight: 800; -fx-font-size: 96px; }
+.cust-board { -fx-background-color: #1F2620; -fx-border-color: #4A5446; -fx-border-width: 1 0 0 0; }
+.board-title { -fx-text-fill: #B9C2AE; -fx-font-weight: 800; -fx-font-size: 14px; }
+.board-num { -fx-text-fill: #F3EFE2; -fx-font-weight: 800; -fx-font-size: 26px; }
+.board-num-ready { -fx-text-fill: #E3A72B; -fx-font-weight: 800; -fx-font-size: 26px; }
+.qty-btn { -fx-background-color: #4A5446; -fx-text-fill: #F3EFE2; -fx-font-weight: 800; -fx-font-size: 20px; -fx-min-width: 48; -fx-min-height: 48; -fx-background-radius: 8; }
+.nav-badge { -fx-background-color: #E3A72B; -fx-text-fill: #2B332C; -fx-font-weight: 800; -fx-font-size: 12px; -fx-background-radius: 10; -fx-padding: 1 7 1 7; }

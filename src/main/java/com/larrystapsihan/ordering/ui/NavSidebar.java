@@ -39,6 +39,7 @@ public final class NavSidebar extends VBox {
     private final ToggleGroup group = new ToggleGroup();
     private final Map<String, ToggleButton> buttonsByLabel = new HashMap<>();
     private final Map<String, Item> itemsByLabel = new HashMap<>();
+    private final Map<String, Label> badgesByLabel = new HashMap<>();
 
     /**
      * @param topItems   entries stacked from the top; the first one starts selected
@@ -79,13 +80,28 @@ public final class NavSidebar extends VBox {
         itemsByLabel.get(label).onSelect().run();
     }
 
+    /** Shows a small count next to an entry's name (e.g. orders waiting); 0 hides it. */
+    public void setBadge(String label, int count) {
+        Label badge = badgesByLabel.get(label);
+        if (badge == null) return;
+        badge.setText(String.valueOf(count));
+        badge.setVisible(count > 0);
+        badge.setManaged(count > 0);
+    }
+
     private ToggleButton buildButton(Item item) {
         Label icon = new Label(item.icon());
         icon.getStyleClass().add("nav-icon");
         Label text = new Label(item.label());
         text.getStyleClass().add("nav-text");
 
-        HBox content = new HBox(12, icon, text);
+        Label badge = new Label();
+        badge.getStyleClass().add("nav-badge");
+        badge.setVisible(false);
+        badge.setManaged(false);
+        badgesByLabel.put(item.label(), badge);
+
+        HBox content = new HBox(12, icon, text, badge);
         content.setAlignment(Pos.CENTER_LEFT);
 
         ToggleButton btn = new ToggleButton();

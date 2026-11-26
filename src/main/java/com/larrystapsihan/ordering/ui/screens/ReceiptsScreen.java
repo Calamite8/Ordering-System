@@ -54,7 +54,8 @@ public class ReceiptsScreen implements Screen {
     @Override
     public void refresh() {
         receiptGrid.getChildren().clear();
-        List<Order> all = orderService.getOrders();
+        // orders still waiting for payment have no receipt yet
+        List<Order> all = orderService.getOrders().stream().filter(o -> !o.isPending()).toList();
         if (all.isEmpty()) {
             Label empty = new Label("No receipts yet.");
             empty.getStyleClass().add("log-empty");

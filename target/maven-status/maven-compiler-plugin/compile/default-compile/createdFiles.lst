@@ -6,8 +6,10 @@ com\larrystapsihan\ordering\ui\OnScreenKeyboard$Mode.class
 com\larrystapsihan\ordering\OrderController.class
 com\larrystapsihan\ordering\model\Dish.class
 com\larrystapsihan\ordering\Order.class
+com\larrystapsihan\ordering\ui\screens\PendingPaymentScreen$ScreenLayoutLabel.class
 com\larrystapsihan\ordering\service\OrderService.class
 com\larrystapsihan\ordering\ui\screens\MenuDialogs.class
+com\larrystapsihan\ordering\ui\screens\PendingPaymentScreen.class
 com\larrystapsihan\inventory\StockInRecord.class
 com\larrystapsihan\ordering\app\OrderMain.class
 com\larrystapsihan\ordering\data\MenuStore.class
@@ -15,7 +17,9 @@ com\larrystapsihan\ordering\data\OrderRepository.class
 com\larrystapsihan\ordering\ui\ReceiptPrinter.class
 com\larrystapsihan\ordering\ui\TouchMode.class
 com\larrystapsihan\ordering\app\OrderLauncher.class
+com\larrystapsihan\ordering\ui\screens\ShiftSummaryScreen$Period.class
 com\larrystapsihan\ordering\ui\OnScreenKeyboard.class
+com\larrystapsihan\ordering\ui\SettingsFile.class
 com\larrystapsihan\ordering\OrderService.class
 com\larrystapsihan\ordering\model\VoidRecord.class
 com\larrystapsihan\inventory\InventoryStore.class
@@ -23,10 +27,13 @@ com\larrystapsihan\ordering\OrderItem.class
 com\larrystapsihan\inventory\Ingredient.class
 com\larrystapsihan\inventory\Dish.class
 com\larrystapsihan\ordering\model\Ingredient$Status.class
+com\larrystapsihan\ordering\ui\screens\CustomerScreen.class
 com\larrystapsihan\ordering\model\Order.class
 com\larrystapsihan\ordering\ui\screens\ManageMenuScreen.class
 com\larrystapsihan\ordering\service\AdminService.class
+com\larrystapsihan\ordering\model\OrderStatus.class
 com\larrystapsihan\ordering\ui\screens\Screen.class
+com\larrystapsihan\ordering\ui\CustomerWindow.class
 com\larrystapsihan\ordering\OrderMain.class
 com\larrystapsihan\ordering\ui\screens\Photos.class
 com\larrystapsihan\inventory\Ingredient$Status.class

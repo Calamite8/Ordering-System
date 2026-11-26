@@ -32,6 +32,7 @@ public class OrderMain extends Application {
 
     private Scene scene;
     private OrderRepository repository;
+    private OrderController controller;
 
     @Override
     public void start(Stage stage) {
@@ -50,6 +51,7 @@ public class OrderMain extends Application {
             stage.setScene(scene);
             stage.setMaximized(true);
             stage.show();
+            controller.openCustomerScreenIfWanted();   // Settings > Customer Screen > opens at startup
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -60,7 +62,7 @@ public class OrderMain extends Application {
         FXMLLoader loader = new FXMLLoader(
                 OrderMain.class.getResource("/com/larrystapsihan/ordering/ui/OrderView.fxml"));
         Parent root = loader.load();
-        OrderController controller = loader.getController();
+        controller = loader.getController();
         controller.setRepository(repository);
         controller.setStore(store);
         store.addChangeListener(controller::refresh);

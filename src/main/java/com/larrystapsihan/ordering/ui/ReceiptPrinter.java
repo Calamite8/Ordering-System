@@ -65,6 +65,10 @@ public final class ReceiptPrinter {
 
         box.getChildren().add(pair("TOTAL", "₱" + o.getTotal(), true));
         box.getChildren().add(pair("Payment", o.getPayMethod(), false));
+        if (o.getAmountPaid() > 0) {
+            box.getChildren().add(pair("Cash", "₱" + o.getAmountPaid(), false));
+            box.getChildren().add(pair("Change", "₱" + o.getChange(), false));
+        }
         if (o.isVoided()) {
             box.getChildren().add(dashes());
             box.getChildren().add(centered("*** VOIDED ORDER ***", 12, true));

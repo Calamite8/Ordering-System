@@ -4,12 +4,15 @@ import com.larrystapsihan.ordering.data.MenuStore;
 import com.larrystapsihan.ordering.data.OrderRepository;
 import com.larrystapsihan.ordering.service.AdminService;
 import com.larrystapsihan.ordering.service.OrderService;
+import com.larrystapsihan.ordering.ui.screens.CustomerScreen;
 import com.larrystapsihan.ordering.ui.screens.KitchenScreen;
+import com.larrystapsihan.ordering.ui.screens.PendingPaymentScreen;
 import com.larrystapsihan.ordering.ui.screens.NewOrderScreen;
 import com.larrystapsihan.ordering.ui.screens.ReceiptsScreen;
 import com.larrystapsihan.ordering.ui.screens.Screen;
 import com.larrystapsihan.ordering.ui.screens.SettingsScreen;
 import com.larrystapsihan.ordering.ui.screens.ManageMenuScreen;
+import com.larrystapsihan.ordering.ui.screens.ShiftSummaryScreen;
 import java.util.List;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
@@ -36,6 +39,9 @@ public class OrderController {
 
     private OrderRepository repository;   // optional - null means no database
     private List<Screen> screens = List.of();
+    private OrderService orderService;
+    private NavSidebar sidebar;
+    private CustomerWindow customerWindow;
 
     /** Optional: save order history to this database. Call before setStore(). */
     public void setRepository(OrderRepository repository) {
@@ -48,29 +54,35 @@ public class OrderController {
     /** Builds the screens and sidebar. Call once, after the optional setter above. */
     public void setStore(MenuStore store) {
         TouchMode.bind(root);
-        OrderService orderService = new OrderService(store, repository);
+        orderService = new OrderService(store, repository);
         AdminService admin = new AdminService(repository);
 
         Screen newOrder = new NewOrderScreen(store, orderService, admin);
         Screen kitchen = new KitchenScreen(orderService, admin);
         Screen receipts = new ReceiptsScreen(orderService, admin);
         Screen manage = new ManageMenuScreen(store);
-        Screen settings = new SettingsScreen(admin);
-        screens = List.of(newOrder, kitchen, receipts, manage, settings);
+        Screen shift = new ShiftSummaryScreen(orderService);
+        Screen pending = new PendingPaymentScreen(orderService);
+        CustomerScreen customer = new CustomerScreen(store, orderService);   // lives in its own window
+        customerWindow = new CustomerWindow(customer);
+        Screen settings = new SettingsScreen(admin, customerWindow, this::openCustomerScreen);
+        screens = List.of(newOrder, pending, kitchen, receipts, manage, shift, settings, customer);
 
-        NavSidebar sidebar = new NavSidebar(
+        sidebar = new NavSidebar(
                 List.of(
                         new NavSidebar.Item("🛒", "New Order", () -> show(newOrder)),
+                        new NavSidebar.Item("💵", "Payments", () -> show(pending)),
                         new NavSidebar.Item("🍳", "Kitchen Queue", () -> show(kitchen)),
                         new NavSidebar.Item("🧾", "Receipts", () -> show(receipts)),
                         // admin only: appears after Settings > Admin Login
-                        new NavSidebar.Item("📋", "Manage Menu", () -> show(manage), admin.loggedInProperty())),
+                        new NavSidebar.Item("📋", "Manage Menu", () -> show(manage), admin.loggedInProperty()),
+                        new NavSidebar.Item("📊", "Shift Summary", () -> show(shift), admin.loggedInProperty())),
                 new NavSidebar.Item("⚙", "Settings", () -> show(settings)));
         root.setLeft(sidebar);
 
         // Locking admin while on Manage Menu would leave a hidden page on screen.
         admin.loggedInProperty().addListener((obs, was, isNow) -> {
-            if (!isNow && root.getCenter() == manage.getView()) sidebar.select("New Order");
+            if (!isNow && (root.getCenter() == manage.getView() || root.getCenter() == shift.getView())) sidebar.select("New Order");
         });
         installIdleLock(admin);
 
@@ -92,6 +104,18 @@ public class OrderController {
     /** Re-draws every screen. OrderMain registers this as the store's change listener. */
     public void refresh() {
         for (Screen s : screens) s.refresh();
+        // customers' orders waiting at the counter
+        if (sidebar != null && orderService != null) sidebar.setBadge("Payments", orderService.getPending().size());
+    }
+
+    /** Opens the Customer Screen (second display if there is one). */
+    public void openCustomerScreen() {
+        if (customerWindow != null && root.getScene() != null) customerWindow.open(root.getScene().getWindow());
+    }
+
+    /** Opens the Customer Screen at startup if the setting says so. Call after the window is showing. */
+    public void openCustomerScreenIfWanted() {
+        if (CustomerWindow.autoOpenProperty().get()) openCustomerScreen();
     }
 
     private void show(Screen screen) {
