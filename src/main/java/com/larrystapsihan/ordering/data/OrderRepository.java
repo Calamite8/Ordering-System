@@ -94,6 +94,19 @@ public class OrderRepository {
                         name TEXT NOT NULL,
                         price INTEGER NOT NULL,
                         photo TEXT,
+                        sort_order INTEGER NOT NULL,
+                        category TEXT NOT NULL DEFAULT ''
+                    )
+                    """);
+            // menus saved by an older version have no category column yet
+            boolean hasCategory = false;
+            try (ResultSet cols = st.executeQuery("PRAGMA table_info(menu_items)")) {
+                while (cols.next()) if ("category".equals(cols.getString("name"))) hasCategory = true;
+            }
+            if (!hasCategory) st.executeUpdate("ALTER TABLE menu_items ADD COLUMN category TEXT NOT NULL DEFAULT ''");
+            st.executeUpdate("""
+                    CREATE TABLE IF NOT EXISTS categories (
+                        name TEXT PRIMARY KEY,
                         sort_order INTEGER NOT NULL
                     )
                     """);
@@ -113,9 +126,10 @@ public class OrderRepository {
         List<Dish> menu = new ArrayList<>();
         try (Connection c = connect();
              Statement st = c.createStatement();
-             ResultSet rs = st.executeQuery("SELECT id, name, price, photo FROM menu_items ORDER BY sort_order")) {
+             ResultSet rs = st.executeQuery("SELECT id, name, price, photo, category FROM menu_items ORDER BY sort_order")) {
             while (rs.next()) {
-                menu.add(new Dish(rs.getString("id"), rs.getString("name"), rs.getInt("price"), rs.getString("photo")));
+                menu.add(new Dish(rs.getString("id"), rs.getString("name"), rs.getInt("price"),
+                        rs.getString("photo"), rs.getString("category")));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to load the menu", e);
@@ -127,15 +141,60 @@ public class OrderRepository {
     public void saveDish(Dish dish, int sortOrder) {
         try (Connection c = connect();
              PreparedStatement ps = c.prepareStatement(
-                     "REPLACE INTO menu_items (id, name, price, photo, sort_order) VALUES (?, ?, ?, ?, ?)")) {
+                     "REPLACE INTO menu_items (id, name, price, photo, sort_order, category) VALUES (?, ?, ?, ?, ?, ?)")) {
             ps.setString(1, dish.getId());
             ps.setString(2, dish.getName());
             ps.setInt(3, dish.getPrice());
             ps.setString(4, dish.getPhotoUri());
             ps.setInt(5, sortOrder);
+            ps.setString(6, dish.getCategory());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to save menu item " + dish.getName(), e);
+        }
+    }
+
+
+    /** Removes a menu item. Past orders keep their own copy of the name and price. */
+    public void deleteDish(String id) {
+        run("DELETE FROM menu_items WHERE id = ?", id);
+    }
+
+    /** The saved food categories, in order. */
+    public List<String> loadCategories() {
+        List<String> list = new ArrayList<>();
+        try (Connection c = connect();
+             Statement st = c.createStatement();
+             ResultSet rs = st.executeQuery("SELECT name FROM categories ORDER BY sort_order")) {
+            while (rs.next()) list.add(rs.getString(1));
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to load categories", e);
+        }
+        return list;
+    }
+
+    public void saveCategory(String name, int sortOrder) {
+        run("REPLACE INTO categories (name, sort_order) VALUES (?, ?)", name, sortOrder);
+    }
+
+    /** Renames a category and moves its items to the new name. */
+    public void renameCategory(String oldName, String newName) {
+        run("UPDATE categories SET name = ? WHERE name = ?", newName, oldName);
+        run("UPDATE menu_items SET category = ? WHERE category = ?", newName, oldName);
+    }
+
+    /** Deletes a category; its items stay on the menu with no category. */
+    public void deleteCategory(String name) {
+        run("DELETE FROM categories WHERE name = ?", name);
+        run("UPDATE menu_items SET category = '' WHERE category = ?", name);
+    }
+
+    private void run(String sql, Object... args) {
+        try (Connection c = connect(); PreparedStatement ps = c.prepareStatement(sql)) {
+            for (int i = 0; i < args.length; i++) ps.setObject(i + 1, args[i]);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Database update failed", e);
         }
     }
 

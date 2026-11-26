@@ -4,7 +4,7 @@
 
 <!--
   Order System shell. The left-hand icon sidebar (New Order / Kitchen
-  Queue / Receipts / Shift Summary, plus Settings pinned at the bottom)
+  Queue / Receipts / Manage Menu, plus Settings pinned at the bottom)
   and all four content panes are built entirely in OrderController.java -
   Scene Builder only owns this empty root, same pattern as LoginView.fxml.
 -->

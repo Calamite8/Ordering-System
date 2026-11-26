@@ -9,7 +9,7 @@ import com.larrystapsihan.ordering.ui.screens.NewOrderScreen;
 import com.larrystapsihan.ordering.ui.screens.ReceiptsScreen;
 import com.larrystapsihan.ordering.ui.screens.Screen;
 import com.larrystapsihan.ordering.ui.screens.SettingsScreen;
-import com.larrystapsihan.ordering.ui.screens.ShiftSummaryScreen;
+import com.larrystapsihan.ordering.ui.screens.ManageMenuScreen;
 import java.util.List;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
@@ -24,7 +24,7 @@ import javafx.util.Duration;
  * and wires them to the sidebar - the screens themselves live in
  * ui/screens/, one file each.
  *
- * It also owns the admin lock: the Shift Summary tab only appears while an
+ * It also owns the admin lock: the Manage Menu tab only appears while an
  * admin is logged in (Settings), and admin mode locks itself after a few
  * minutes without any mouse or keyboard activity.
  *
@@ -54,9 +54,9 @@ public class OrderController {
         Screen newOrder = new NewOrderScreen(store, orderService, admin);
         Screen kitchen = new KitchenScreen(orderService, admin);
         Screen receipts = new ReceiptsScreen(orderService, admin);
-        Screen shift = new ShiftSummaryScreen(orderService);
+        Screen manage = new ManageMenuScreen(store);
         Screen settings = new SettingsScreen(admin);
-        screens = List.of(newOrder, kitchen, receipts, shift, settings);
+        screens = List.of(newOrder, kitchen, receipts, manage, settings);
 
         NavSidebar sidebar = new NavSidebar(
                 List.of(
@@ -64,13 +64,13 @@ public class OrderController {
                         new NavSidebar.Item("🍳", "Kitchen Queue", () -> show(kitchen)),
                         new NavSidebar.Item("🧾", "Receipts", () -> show(receipts)),
                         // admin only: appears after Settings > Admin Login
-                        new NavSidebar.Item("📊", "Shift Summary", () -> show(shift), admin.loggedInProperty())),
+                        new NavSidebar.Item("📋", "Manage Menu", () -> show(manage), admin.loggedInProperty())),
                 new NavSidebar.Item("⚙", "Settings", () -> show(settings)));
         root.setLeft(sidebar);
 
-        // Locking admin while on Shift Summary would leave a hidden page on screen.
+        // Locking admin while on Manage Menu would leave a hidden page on screen.
         admin.loggedInProperty().addListener((obs, was, isNow) -> {
-            if (!isNow && root.getCenter() == shift.getView()) sidebar.select("New Order");
+            if (!isNow && root.getCenter() == manage.getView()) sidebar.select("New Order");
         });
         installIdleLock(admin);
 

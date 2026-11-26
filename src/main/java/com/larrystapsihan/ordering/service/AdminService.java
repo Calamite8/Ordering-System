@@ -19,7 +19,7 @@ import javax.crypto.spec.PBEKeySpec;
 /**
  * The admin account: create it, log in, lock. Cashiers never log in - the
  * app opens straight to ordering - and admin-only actions (add menu items,
- * clear queue/receipts, void orders, Shift Summary) appear only while
+ * clear queue/receipts, void orders, Manage Menu) appear only while
  * loggedInProperty() is true.
  *
  * The password is never stored as text - only a salted PBKDF2 hash. It is

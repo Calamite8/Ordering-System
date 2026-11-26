@@ -6,7 +6,7 @@ import com.larrystapsihan.ordering.model.Dish;
 import com.larrystapsihan.ordering.model.Order;
 import com.larrystapsihan.ordering.model.OrderItem;
 import com.larrystapsihan.ordering.model.VoidRecord;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ import java.util.Map;
  */
 public class OrderService {
 
-    private static final DateTimeFormatter TIME_FMT = DateTimeFormatter.ofPattern("hh:mm a");
+    private static final DateTimeFormatter TIME_FMT = DateTimeFormatter.ofPattern("MMM d, yyyy hh:mm a");
 
     private final MenuStore store;
     private final OrderRepository repository; // nullable - no database is a valid mode
@@ -121,6 +121,6 @@ public class OrderService {
     }
 
     private String timeNow() {
-        return LocalTime.now().format(TIME_FMT);
+        return LocalDateTime.now().format(TIME_FMT);
     }
 }

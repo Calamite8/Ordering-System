@@ -41,8 +41,8 @@ public class SettingsScreen implements Screen {
 
         Label title = new Label("Settings");
         title.getStyleClass().add("section-title");
-        Label note = new Label("Admin login unlocks menu editing, Clear Queue, Clear Receipts, "
-                + "voiding orders and the Shift Summary.");
+        Label note = new Label("Admin login unlocks Manage Menu (categories, items, prices), Clear Queue, Clear Receipts "
+                + "and voiding orders.");
         note.getStyleClass().add("section-note");
         note.setWrapText(true);
         VBox header = new VBox(4, title, note);
