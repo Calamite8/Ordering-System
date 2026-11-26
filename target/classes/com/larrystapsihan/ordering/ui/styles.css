@@ -317,6 +317,45 @@
     -fx-font-size: 12.5px;
 }
 
+/* Settings scroll pane scrollbar – uses theme colors */
+.settings-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 10;
+}
+
+.settings-scroll .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 6;
+}
+
+.settings-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: #47523F;          /* board-line */
+    -fx-background-radius: 6;
+    -fx-background-insets: 2;
+}
+
+.settings-scroll .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #7C9A65;          /* kangkong */
+}
+
+.settings-scroll .scroll-bar:vertical .thumb:pressed {
+    -fx-background-color: #363F30;          /* board-light */
+}
+
+/* Hide the arrow buttons */
+.settings-scroll .scroll-bar:vertical .increment-button,
+.settings-scroll .scroll-bar:vertical .decrement-button {
+    -fx-pref-height: 0;
+    -fx-opacity: 0;
+}
+
+
+.settings-scroll,
+.settings-scroll > .viewport,
+.settings-scroll > .corner {
+    -fx-background-color: transparent;
+}
 
 /* ---------- 8. Touchscreen Mode ----------
    TouchMode.java adds the "touch-mode" class to the window root and to every
